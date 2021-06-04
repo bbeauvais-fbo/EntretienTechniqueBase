@@ -1,9 +1,9 @@
 package com.groupefbo.apitransport.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,15 +16,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "trajet")
 public class Trajet {
@@ -46,13 +37,66 @@ public class Trajet {
 	@Column(name = "moment_arrivee")
 	private LocalDateTime momentArrivee;
 
-	@Builder.Default
 	@OrderBy("ordre")
 	@OneToMany(mappedBy = "trajet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Etape> etapes = new ArrayList<>();
 
-	public boolean estAujourdhui() {
-		return momentDepart.toLocalDate().isEqual(LocalDate.now());
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getIntitule() {
+		return intitule;
+	}
+
+	public void setIntitule(String intitule) {
+		this.intitule = intitule;
+	}
+
+	public LocalDateTime getMomentDepart() {
+		return momentDepart;
+	}
+
+	public void setMomentDepart(LocalDateTime momentDepart) {
+		this.momentDepart = momentDepart;
+	}
+
+	public LocalDateTime getMomentArrivee() {
+		return momentArrivee;
+	}
+
+	public void setMomentArrivee(LocalDateTime momentArrivee) {
+		this.momentArrivee = momentArrivee;
+	}
+
+	public List<Etape> getEtapes() {
+		return etapes;
+	}
+
+	public void setEtapes(List<Etape> etapes) {
+		this.etapes = etapes;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(etapes, id, intitule, momentArrivee, momentDepart);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Trajet other = (Trajet) obj;
+		return Objects.equals(etapes, other.etapes) && Objects.equals(id, other.id) && Objects.equals(intitule, other.intitule)
+			&& Objects.equals(momentArrivee, other.momentArrivee) && Objects.equals(momentDepart, other.momentDepart);
 	}
 
 }
